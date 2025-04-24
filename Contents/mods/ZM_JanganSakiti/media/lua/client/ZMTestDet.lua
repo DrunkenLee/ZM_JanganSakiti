@@ -23,6 +23,23 @@ end
 
 EventsPlus:Add("OnItemMoved", onItemMoved, "ZM_JanganSakiti_ItemMoved")
 
+local itemTypeToCheck = {
+    "Base.Ashley",
+    "Base.Helga0",
+    "Base.Specialist",
+    "Base.Tifa",
+    "Base.ada_wong",
+    "Base.fbi",
+    "Base.swat",
+    "ZM_Mungkinkah.ZM_MysticOrb"
+}
+
+-- Convert itemTypeToCheck array to a lookup table for faster checks
+local itemTypeToCheckLookup = {}
+for _, itemType in ipairs(itemTypeToCheck) do
+    itemTypeToCheckLookup[itemType] = true
+end
+
 local function checkInventory()
     local player = getPlayer()
     if not player then return end
@@ -43,12 +60,15 @@ local function checkInventory()
             local diff = count - lastCount
             if movedCount < diff then
                 print("Item spawned directly to inventory: "..itemType.." x"..(diff - movedCount))
-                -- Send log to server
-                sendClientCommand("ZM_JanganSakiti", "CheatAttempt", {
-                    reason = "ItemSpawned",
-                    itemType = itemType,
-                    amount = (diff - movedCount)
-                })
+                -- Only send log to server if this item type is in our watch list
+                if itemTypeToCheckLookup[itemType] then
+                    -- Send log to server
+                    sendClientCommand("ZM_JanganSakiti", "CheatAttempt", {
+                        reason = "ItemSpawned",
+                        itemType = itemType,
+                        amount = (diff - movedCount)
+                    })
+                end
             end
         end
     end
