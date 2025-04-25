@@ -58,9 +58,6 @@ local function checkInventory()
         local movedCount = movedItemsTick[itemType] or 0
         if count > lastCount then
             local diff = count - lastCount
-            if movedCount < diff then
-                print("Item spawned directly to inventory: "..itemType.." x"..(diff - movedCount))
-                -- Only send log to server if this item type is in our watch list
                 if itemTypeToCheckLookup[itemType] then
                     -- Send log to server
                     sendClientCommand("ZM_JanganSakiti", "CheatAttempt", {
@@ -77,6 +74,6 @@ local function checkInventory()
     movedItemsTick = {}
 end
 
-Events.OnPlayerUpdate.Add(function()
-    checkInventory()
+Events.EveryTenMinutes.Add(function()
+  checkInventory()
 end)
