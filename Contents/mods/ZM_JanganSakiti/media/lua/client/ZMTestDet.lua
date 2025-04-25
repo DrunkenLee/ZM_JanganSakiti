@@ -54,20 +54,19 @@ local function checkInventory()
     end
 
     for itemType, count in pairs(currentItems) do
-        local lastCount = lastInventory[itemType] or 0
-        local movedCount = movedItemsTick[itemType] or 0
-        if count > lastCount then
-            local diff = count - lastCount
-                if itemTypeToCheckLookup[itemType] then
-                    -- Send log to server
-                    sendClientCommand("ZM_JanganSakiti", "CheatAttempt", {
-                        reason = "ItemSpawned",
-                        itemType = itemType,
-                        amount = (diff - movedCount)
-                    })
-                end
-            end
-        end
+      local lastCount = lastInventory[itemType] or 0
+      local movedCount = movedItemsTick[itemType] or 0
+      if count > lastCount then
+          local diff = count - lastCount
+          if itemTypeToCheckLookup[itemType] then
+              -- Send log to server
+              sendClientCommand("ZM_JanganSakiti", "CheatAttempt", {
+                  reason = "ItemSpawned",
+                  itemType = itemType,
+                  amount = (diff - movedCount)
+              })
+          end
+      end
     end
 
     lastInventory = currentItems
