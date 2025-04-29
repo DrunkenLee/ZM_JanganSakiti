@@ -88,6 +88,4 @@ local function checkInventory()
   movedItemsTick = {}
 end
 
-Events.EveryTenMinutes.Add(function()
-  checkInventory()
-end)
+Events.EveryOneMinutes.Add(checkInventory)

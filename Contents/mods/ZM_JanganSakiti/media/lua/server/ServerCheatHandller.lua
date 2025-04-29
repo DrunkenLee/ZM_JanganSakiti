@@ -7,13 +7,10 @@ print("ZM_JanganSakiti: Server-side cheat handler initializing...")
 local function onClientCommand(module, command, player, args)
     -- Only process our mod's commands
     if module ~= "ZM_JanganSakiti" then return end
-    
-    -- Handle cheat attempt detection with proper null checks
+
     if command == "CheatAttempt" and player then
-        -- Safely get player info
         local username = player:getUsername() or "Unknown"
-        
-        -- Check if player is an admin
+
         local isAdmin = false
         if player:getAccessLevel() and player:getAccessLevel() ~= "" then
             isAdmin = true
@@ -31,6 +28,17 @@ local function onClientCommand(module, command, player, args)
             reason,
             itemType,
             tostring(amount)
+        ))
+    end
+
+    if command == "UnauthorizedAdmin" and player then
+        local username = args.username or player:getUsername() or "Unknown"
+        local accessLevel = args.accessLevel or "Unknown"
+
+        print(string.format(
+            "ZM_JanganSakiti: ALERT - Unauthorized admin detected! Username: %s, Access Level: %s",
+            username,
+            accessLevel
         ))
     end
 end
