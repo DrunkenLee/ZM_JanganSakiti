@@ -112,7 +112,6 @@ Events.OnPreUIDraw.Add(function()
         if not blackScreenActive and not isExemptUser() then
             print("ZM_JanganSakiti: INSERT key detected through isKeyDown - potential cheat attempt")
             createBlackScreen()
-            disconnectFromServer()
         end
     end
 
