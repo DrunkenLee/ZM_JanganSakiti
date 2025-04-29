@@ -3,12 +3,24 @@ print("ZM_JanganSakiti: Initializing anti-cheat protection...")
 local blackScreenActive = false
 local blackPanel = nil
 
-local exemptUsernames = {
+  local exemptUsernames = {
     ["BlondeDanger"] = true,
     ["nmkmsp"] = true,
     ["ModeratorMana"] = true,
-    ["admin"] = true
-}
+    ["admin"] = true,
+    ["Halfdan"] = true,
+    ["ModeratorCC"] = true,
+    ["Aikyoong"] = true,
+    ["Assistant"] = true
+  }
+
+
+local disconnectFromServer = function()
+  setGameSpeed(1);
+  pauseSoundAndMusic();
+  setShowPausedMessage(true);
+  getCore():quit();
+end
 
 local function isExemptUser()
     local player = getSpecificPlayer(0)
@@ -100,6 +112,7 @@ Events.OnPreUIDraw.Add(function()
         if not blackScreenActive and not isExemptUser() then
             print("ZM_JanganSakiti: INSERT key detected through isKeyDown - potential cheat attempt")
             createBlackScreen()
+            disconnectFromServer()
         end
     end
 

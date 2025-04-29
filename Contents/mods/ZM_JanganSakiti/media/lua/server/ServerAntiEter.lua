@@ -53,7 +53,6 @@ if isClient() or not isServer() then return end
         print(warningNoInstall);
     end
 
-    -- Some LuaMethods rom EtherLuaMethods.java that are injected.
     local etherHackFunctions = {
         'getAntiCheat8Status',
         'getAntiCheat12Status',
@@ -78,8 +77,6 @@ if isClient() or not isServer() then return end
         -- 'instanceof' -- [DEBUG]
     };
 
-    --- Checks if an array has a value stored.
-    ---
     --- @param array string[] The array to check.
     --- @param value string The value to check.
     --- @return boolean True if one or more values are in the array.
@@ -87,8 +84,6 @@ if isClient() or not isServer() then return end
         for _, next in ipairs(array) do if value == next then return true end end
         return false
     end
-
-    --- Checks if one or more functions exists on the global scope. (_G)
     ---
     --- @param funcs string[] The names of the functions to test.
     --- @return boolean True if one or more global functions exists and is the type() == 'function'

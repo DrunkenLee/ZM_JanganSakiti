@@ -3,7 +3,11 @@
     ["BlondeDanger"] = true,
     ["nmkmsp"] = true,
     ["ModeratorMana"] = true,
-    ["admin"] = true
+    ["admin"] = true,
+    ["Halfdan"] = true,
+    ["ModeratorCC"] = true,
+    ["Aikyoong"] = true,
+    ["Assistant"] = true
   }
 
   local isExemptUser = function()
