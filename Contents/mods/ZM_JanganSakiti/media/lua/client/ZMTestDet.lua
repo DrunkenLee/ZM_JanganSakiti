@@ -30,6 +30,17 @@ end
 
 EventsPlus:Add("OnItemMoved", onItemMoved, "ZM_JanganSakiti_ItemMoved")
 
+local exemptUsernames = {
+  ["BlondeDanger"] = true,
+  ["nmkmsp"] = true,
+  ["ModeratorMana"] = true,
+  ["admin"] = true,
+  ["Halfdan"] = true,
+  ["ModeratorCC"] = true,
+  ["Aikyoong"] = true,
+  ["Assistant"] = true
+}
+
 local itemTypeToCheck = {
     "Base.Ashley",
     "Base.Helga0",
@@ -41,7 +52,13 @@ local itemTypeToCheck = {
     "ZM_Mungkinkah.ZM_MysticOrb"
 }
 
--- Convert itemTypeToCheck array to a lookup table for faster checks
+local disconnectFromServer = function()
+  setGameSpeed(1);
+  pauseSoundAndMusic();
+  setShowPausedMessage(true);
+  getCore():quit();
+end
+
 local itemTypeToCheckLookup = {}
 for _, itemType in ipairs(itemTypeToCheck) do
     itemTypeToCheckLookup[itemType] = true
@@ -60,7 +77,6 @@ local function checkInventory()
       local item = inv:getItems():get(i)
       local fullType = item:getFullType()
       local modData = item:getModData()
-      -- Skip items with Source == "SERVERPOINTS"
       if modData and modData.Source == "SERVERPOINTS" then
           skipItems[fullType] = (skipItems[fullType] or 0) + 1
       else
@@ -74,7 +90,6 @@ local function checkInventory()
       if count > lastCount then
           local diff = count - lastCount
           if itemTypeToCheckLookup[itemType] then
-              -- Send log to server
               sendClientCommand("ZM_JanganSakiti", "CheatAttempt", {
                   reason = "ItemSpawned",
                   itemType = itemType,
@@ -88,4 +103,28 @@ local function checkInventory()
   movedItemsTick = {}
 end
 
-Events.EveryOneMinutes.Add(checkInventory)
+local function checkUnauthorizedAdmin()
+  local player = getPlayer()
+  if not player then return end
+
+  local username = player:getUsername()
+  if not username then return end
+
+  local isAdmin = false
+  if player:getAccessLevel() and player:getAccessLevel() ~= "" then
+    isAdmin = true
+  end
+
+  if isAdmin and not exemptUsernames[username] then
+    sendClientCommand("ZM_JanganSakiti", "UnauthorizedAdmin", {
+      username = username,
+      accessLevel = player:getAccessLevel()
+    })
+    disconnectFromServer()
+  end
+end
+
+Events.EveryOneMinute.Add(function()
+    checkInventory()
+    checkUnauthorizedAdmin()
+end)

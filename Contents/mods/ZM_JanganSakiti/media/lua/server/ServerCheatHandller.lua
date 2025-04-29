@@ -5,9 +5,9 @@ print("ZM_JanganSakiti: Server-side cheat handler initializing...")
 
 -- Function to handle client commands
 local function onClientCommand(module, command, player, args)
-    -- Only process our mod's commands
-    if module ~= "ZM_JanganSakiti" then return end
 
+    if module ~= "ZM_JanganSakiti" then return end
+    print("ZM_JanganSakiti: Received command from client: " .. command)
     if command == "CheatAttempt" and player then
         local username = player:getUsername() or "Unknown"
 
@@ -32,6 +32,7 @@ local function onClientCommand(module, command, player, args)
     end
 
     if command == "UnauthorizedAdmin" and player then
+        print('MASUK SERVER')
         local username = args.username or player:getUsername() or "Unknown"
         local accessLevel = args.accessLevel or "Unknown"
 
